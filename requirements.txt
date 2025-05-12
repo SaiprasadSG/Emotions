@@ -1,7 +1,8 @@
 streamlit==1.45.0
 opencv-python-headless
 deepface
-tensorflow<2.16
+tensorflow==2.15.0  # Ensure compatibility with tf-keras
+tf-keras  # Required for retinaface to work with tensorflow >=2.16
 keras<3
 pandas==2.2.3
 numpy<2.0
