@@ -6,48 +6,83 @@ from streamlit_option_menu import option_menu
 
 # 1) Page config
 st.set_page_config(
-    page_title="Real-Time Face Emotion Detector", 
+    page_title="Real-Time Face Emotion Detector",
     page_icon="😂",
     layout="wide",
     initial_sidebar_state="auto"
 )
 
 # 2) Hide default Streamlit header/footer
-st.markdown("""
+import streamlit as st
+
+# Hide Streamlit default elements
+st.markdown(
+    """
     <style>
-      #MainMenu, footer, header {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
+
 
 # 3) Your custom CSS (cards, title bar, footer)
+import streamlit as st
+
+# Inject CSS styling
 st.markdown("""
     <style>
       .title {
         font-size: 2.8rem; font-weight: bold;
-        color: white; text-align: center;
+        color: green; text-align: center;
         padding: 1rem; background: linear-gradient(90deg,#2C3E50,#4CA1AF);
         border-radius: .5rem; margin-bottom: 1rem;
       }
       .card {
-        background: white; border-radius: 1rem;
+        background: green; border-radius: 1rem;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         padding: 1.5rem; margin-bottom: 1rem;
       }
-      .footer { text-align: center; font-size: .9rem; color: #888; margin-top: 2rem; }
+      .footer {
+        text-align: center; font-size: .9rem;
+        color: #888; margin-top: 2rem;
+      }
     </style>
 """, unsafe_allow_html=True)
+
+# Use the styled elements
+st.markdown('<div class="title">Emotion Detection App</div>', unsafe_allow_html=True)
+st.markdown('<div class="card">Upload an image to get started!</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made with MITCORER TEAM</div>', unsafe_allow_html=True)
+
 
 
 
 
 # Function to analyze facial attributes using DeepFace
+from deepface import DeepFace
+import numpy as np
+
 def analyze_frame(frame):
-    result = DeepFace.analyze(img_path=frame, actions=['emotion'],
-                              enforce_detection=False,
-                              detector_backend="opencv",
-                              align=True,
-                              silent=False)
-    return result
+    try:
+        if isinstance(frame, np.ndarray):
+            result = DeepFace.analyze(
+                img_path=frame,
+                actions=['emotion'],
+                enforce_detection=False,
+                detector_backend="retinaface",  # or try 'opencv', 'mtcnn'
+                align=True,
+                silent=True
+            )
+            return result
+        else:
+            print("Error: Invalid frame format")
+            return None
+    except Exception as e:
+        print("DeepFace error:", e)
+        return None
 
 def overlay_text_on_frame(frame, texts):
     overlay = frame.copy()
@@ -130,7 +165,7 @@ def main():
             }
         )
         st.markdown("---")
-        st.markdown("<div class='card'><h5>🔧 Developed by Rohan Garad</h5><p>Thanks for visiting!</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='card'><h5>🔧 Developed by MITCORER TEAM</h5><p>Thanks for visiting!</p></div>", unsafe_allow_html=True)
     
     if choice == "Home":
         st.markdown("<div class='title'>Welcome to Real‑Time Face Emotion Detector</div>", unsafe_allow_html=True)
@@ -188,7 +223,7 @@ def main():
         st.markdown("<div class='title'>About This App</div>", unsafe_allow_html=True)
         st.markdown("<div class='card'><p>This app uses OpenCV, DeepFace & Streamlit.</p></div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='footer'>Built with ❤️ by Rohan Garad</div>", unsafe_allow_html=True)
+    st.markdown("<div class='footer'>Built with MITCORER TEAM </div>", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
